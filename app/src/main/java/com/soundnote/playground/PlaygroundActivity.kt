@@ -15,6 +15,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.soundnote.R
 import com.soundnote.databinding.ActivityPlaygroundBinding
+import com.soundnote.databinding.ViewNoteRowBinding
 import com.soundnote.playground.internal.SingleNote
 import com.soundnote.playground.internal.State
 
@@ -55,8 +56,9 @@ class PlaygroundActivity: AppCompatActivity() {
                 }
                 State.IN_LOOP -> {
                     endTime = player.currentPosition
-                    state = State.END
+                    state = State.START
                     createSingleNoteAndPushToList(startTime, endTime)
+                    populateView(notesList.size - 1)
                 }
                 State.END -> {
                     state = State.START
@@ -64,16 +66,14 @@ class PlaygroundActivity: AppCompatActivity() {
                 }
             }
 
-//            timeStamp = player.currentPosition
-
-//            pauseAfterSpecifiedTimeDelay(5*1000)
-
         }
 
 //        val mediaItem = MediaItem.fromUri("https://download.samplelib.com/mp3/sample-12s.mp3")
         val mediaItem = MediaItem.fromUri("http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3")
         player.setMediaItem(mediaItem)
         player.prepare()
+        playgroundBinding.epMusic.controllerShowTimeoutMs = 0
+        playgroundBinding.epMusic.controllerHideOnTouch = false
 
         handler = Handler(Looper.getMainLooper())
 
@@ -81,8 +81,20 @@ class PlaygroundActivity: AppCompatActivity() {
         player.play()
     }
 
+    fun populateView(index: Int) {
+        val note = notesList.get(index)
+        val view: ViewNoteRowBinding = ViewNoteRowBinding.inflate(layoutInflater)
+        view.ttStartTime.text = ((note._startTime * 1F)/1000F).toString()
+        view.ttEndTime.text = ((note._endTime * 1F)/1000F).toString()
+        view.root.setOnClickListener({
+            playNote(note._startTime, note._endTime)
+        })
+        playgroundBinding.llNotesList.addView(view.root)
+    }
+
     fun playNote(startTime: Long, endTime: Long) {
         player.seekTo(startTime)
+        player.play()
         pauseAfterSpecifiedTimeDelay(endTime - startTime)
     }
 
