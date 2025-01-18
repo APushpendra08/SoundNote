@@ -95,6 +95,7 @@ class PlaygroundActivity: AppCompatActivity() {
     fun playNote(startTime: Long, endTime: Long) {
         player.seekTo(startTime)
         player.play()
+        removeOlderPauses()
         pauseAfterSpecifiedTimeDelay(endTime - startTime)
     }
 
@@ -108,6 +109,10 @@ class PlaygroundActivity: AppCompatActivity() {
             Log.d("SeekFinder CurrentTime : ",  player.currentPosition.toString())
             player.pause()
         }, 1000)
+    }
+
+    fun removeOlderPauses() {
+        handler.removeCallbacksAndMessages(null)
     }
 
     fun pauseAfterSpecifiedTimeDelay(timeInMillis: Long){
