@@ -53,4 +53,24 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.5.1")
     implementation("androidx.media3:media3-exoplayer-dash:1.5.1")
     implementation("androidx.media3:media3-ui:1.5.1")
+
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
+
+    implementation(fileTree("libs") {
+        include("*.aar")
+        include("*.jar")
+    })
+
+    implementation("com.google.code.gson:gson:2.6.1")
+
+    implementation("com.spotify.android:auth:1.2.5")
+
+
+//    implementation(name ="spotify-app-remote-release-0.8.0" , ext ="aar")
+//
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation(fileTree(dir:))
+//    dir: 'libs', includes: ['*.jar', '*.aar']
+
+
 }
