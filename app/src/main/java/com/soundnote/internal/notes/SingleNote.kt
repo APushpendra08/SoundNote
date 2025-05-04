@@ -1,4 +1,4 @@
-package com.soundnote.playground.internal
+package com.soundnote.internal.notes
 
 class SingleNote(startTime: Long = 0L, endTime: Long = 0L) {
     val _startTime: Long

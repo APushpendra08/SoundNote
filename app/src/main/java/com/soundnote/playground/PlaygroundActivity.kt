@@ -3,7 +3,6 @@ package com.soundnote.playground
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.PersistableBundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
@@ -16,8 +15,8 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.soundnote.R
 import com.soundnote.databinding.ActivityPlaygroundBinding
 import com.soundnote.databinding.ViewNoteRowBinding
-import com.soundnote.playground.internal.SingleNote
-import com.soundnote.playground.internal.State
+import com.soundnote.internal.notes.SingleNote
+import com.soundnote.internal.notes.PlayerState
 
 class PlaygroundActivity: AppCompatActivity() {
 
@@ -25,7 +24,7 @@ class PlaygroundActivity: AppCompatActivity() {
     lateinit var player: ExoPlayer
     lateinit var handler: Handler
     var timeStamp: Long = 0L
-    var state = State.START
+    var state = PlayerState.START
     var startTime = 0L
     var endTime = 0L
     var notesList = mutableListOf<SingleNote>()
@@ -50,18 +49,18 @@ class PlaygroundActivity: AppCompatActivity() {
             Log.d("SeekFinder CurrentTime : + $state + :" ,  player.currentPosition.toString())
 
             when(state){
-                State.START -> {
+                PlayerState.START -> {
                     startTime = player.currentPosition
-                    state = State.IN_LOOP
+                    state = PlayerState.IN_LOOP
                 }
-                State.IN_LOOP -> {
+                PlayerState.IN_LOOP -> {
                     endTime = player.currentPosition
-                    state = State.START
+                    state = PlayerState.START
                     createSingleNoteAndPushToList(startTime, endTime)
                     populateView(notesList.size - 1)
                 }
-                State.END -> {
-                    state = State.START
+                PlayerState.END -> {
+                    state = PlayerState.START
                     playNote(startTime, endTime)
                 }
             }
@@ -111,6 +110,7 @@ class PlaygroundActivity: AppCompatActivity() {
         }, 1000)
     }
 
+    //copied
     fun removeOlderPauses() {
         handler.removeCallbacksAndMessages(null)
     }
